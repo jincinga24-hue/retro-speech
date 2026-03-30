@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Retrospective Script — Aria (Zihan Ma)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f8f7f4;
+    color: #2d2d2d;
+    line-height: 1.7;
+    padding: 0;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+    animation: shimmer 8s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(5%, 5%); }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .hero .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    font-weight: 400;
+    position: relative;
+  }
+
+  .hero .meta {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    font-size: 0.85rem;
+    opacity: 0.65;
+    position: relative;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .toc {
+    background: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1px solid #e8e6e1;
+  }
+
+  .toc h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    margin-bottom: 14px;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0eeeb;
+    text-decoration: none;
+    color: #2d2d2d;
+    transition: color 0.2s;
+  }
+
+  .toc-item:last-child { border-bottom: none; }
+  .toc-item:hover { color: #0f3460; }
+
+  .toc-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .toc-badge.p1 { background: #6c5ce7; }
+  .toc-badge.p2 { background: #e17055; }
+  .toc-badge.p3 { background: #00b894; }
+
+  .toc-label { font-weight: 500; font-size: 0.95rem; }
+  .toc-time { margin-left: auto; font-size: 0.8rem; color: #aaa; }
+
+  .section {
+    background: white;
+    border-radius: 12px;
+    padding: 36px 36px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1px solid #e8e6e1;
+    position: relative;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f0eeeb;
+  }
+
+  .section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .section-number.p1 { background: #6c5ce7; }
+  .section-number.p2 { background: #e17055; }
+  .section-number.p3 { background: #00b894; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+  }
+
+  .section-time {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: #aaa;
+    background: #f8f7f4;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .script-text {
+    font-size: 1.02rem;
+    line-height: 1.85;
+  }
+
+  .script-text p {
+    margin-bottom: 18px;
+  }
+
+  .script-text p:last-child { margin-bottom: 0; }
+
+  .subsection {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px dashed #e0ded9;
+  }
+
+  .subsection-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .subsection-title .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot.decision { background: #e17055; }
+  .dot.conflict { background: #fdcb6e; }
+  .dot.behaviour { background: #00b894; }
+
+  .highlight-box {
+    background: #f8f7f4;
+    border-left: 3px solid #6c5ce7;
+    padding: 16px 20px;
+    margin: 18px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95rem;
+    color: #444;
+  }
+
+  .highlight-box.insight {
+    border-left-color: #00b894;
+  }
+
+  .highlight-box.example {
+    border-left-color: #e17055;
+  }
+
+  strong { font-weight: 600; }
+
+  .draft-pick {
+    background: #fff8e1;
+    border: 2px dashed #f9a825;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    position: relative;
+  }
+
+  .draft-pick::before {
+    content: 'PICK ONE';
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: #f9a825;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 10px;
+    border-radius: 4px;
+  }
+
+  .draft-pick .option {
+    padding: 12px 0;
+    border-bottom: 1px solid #ffe082;
+  }
+
+  .draft-pick .option:last-child { border-bottom: none; }
+
+  .draft-pick .option-label {
+    font-weight: 700;
+    color: #e65100;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+  }
+
+  .draft-pick .option p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .fill-in {
+    background: #e3f2fd;
+    border: 2px dashed #42a5f5;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    position: relative;
+  }
+
+  .fill-in::before {
+    content: 'FILL IN YOUR OWN';
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: #42a5f5;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 10px;
+    border-radius: 4px;
+  }
+
+  .fill-in p {
+    margin: 4px 0;
+    font-size: 0.93rem;
+    color: #1565c0;
+  }
+
+  .rubric-card {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white;
+    border-radius: 12px;
+    padding: 32px;
+    margin-top: 40px;
+  }
+
+  .rubric-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 18px;
+  }
+
+  .rubric-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .rubric-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    opacity: 0.9;
+  }
+
+  .check {
+    color: #55efc4;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid #e8e6e1;
+    font-size: 0.8rem;
+    color: #bbb;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 40px 20px; }
+    .hero h1 { font-size: 1.7rem; }
+    .hero .meta { flex-direction: column; gap: 6px; }
+    .section { padding: 24px 20px; }
+    .rubric-grid { grid-template-columns: 1fr; }
+    .toc { padding: 20px; }
+  }
+
+  @media print {
+    .hero { background: #1a1a2e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section { break-inside: avoid; }
+    body { padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Team Retrospective</h1>
+  <div class="subtitle">Aria (Zihan Ma) &mdash; Research & AI Development</div>
+  <div class="meta">
+    <span>Proskill Workwear Australia</span>
+    <span>&bull;</span>
+    <span>Consulting Project</span>
+    <span>&bull;</span>
+    <span>~10 min</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <h3>Script Overview</h3>
+    <a class="toc-item" href="#part1">
+      <span class="toc-badge p1">1</span>
+      <span class="toc-label">Introduction &mdash; Who I Am & My Role</span>
+      <span class="toc-time">~2.5 min</span>
+    </a>
+    <a class="toc-item" href="#part2">
+      <span class="toc-badge p2">2</span>
+      <span class="toc-label">Decision Making & Conflict Resolution</span>
+      <span class="toc-time">~4 min</span>
+    </a>
+    <a class="toc-item" href="#part3">
+      <span class="toc-badge p3">3</span>
+      <span class="toc-label">Key Team Behaviours</span>
+      <span class="toc-time">~3.5 min</span>
+    </a>
+  </div>
+
+  <!-- PART 1 -->
+  <div class="section" id="part1">
+    <div class="section-header">
+      <span class="section-number p1">1</span>
+      <span class="section-title">Introduction</span>
+      <span class="section-time">~2.5 min</span>
+    </div>
+    <div class="script-text">
+      <p>Hi everyone, my name is Aria &mdash; Zihan Ma. In this project with Proskill Workwear Australia, I've been working within the <strong>Research and AI Development</strong> function alongside Kim. Our core responsibility has been building the data infrastructure and predictive tools that power the team's sales and marketing strategy.</p>
+
+      <p>Before I get into the specifics, I want to share a bit about how I see my role within this team. Early on, when we did our team profiling exercise, I identified as a <strong>"Giver"</strong> &mdash; someone who naturally gravitates toward supporting teammates, sharing resources, and building a collaborative environment. That self-awareness has been important throughout this project because it shaped how I approached both my technical work and my interactions with the rest of the team.</p>
+
+      <p>In terms of strengths, I've always valued building strong relationships with team members and contributing to a positive, inclusive team environment. But I'm also aware of my growth areas &mdash; I tend to <strong>overcommit</strong>, which can risk burnout, and sometimes my sensitivity means I take feedback more personally than I should. One threat I identified early on was my tendency to leave tasks until later, which under pressure can lead to rushed work. Being conscious of these patterns has helped me manage them throughout this project &mdash; not perfectly, but more intentionally than before.</p>
+
+      <p>Within the Research and AI function, my key contributions have included helping build the <strong>structured prospect dataset</strong> &mdash; we compiled over 100 qualified leads across industries like civil construction, mining services, logistics, and steel fabrication. Each record includes the business name, industry, employee count, location, decision-maker contact, email, and LinkedIn profile. This dataset is what enables the predictive modelling and the automated outreach workflows that the team set as our core deliverables.</p>
+
+      <div class="draft-pick">
+        <div style="font-size:0.9rem; color:#666; margin-bottom:12px;">Add a <strong>leadership moment</strong> to Part 1. Pick the one closest to reality:</div>
+        <div class="option">
+          <div class="option-label">Option A: You initiated the data format meeting</div>
+          <p>"One thing I'm glad I did was call a meeting between both sub-teams when I noticed we hadn't aligned on what the final dataset should look like. Nobody had asked for that meeting, but I could see we were about to build something the marketing side couldn't use. That conversation saved us from redoing a week of work."</p>
+        </div>
+        <div class="option">
+          <div class="option-label">Option B: You pushed back on scope when Kim wanted more</div>
+          <p>"There was a point where Kim and I disagreed on how many data fields to include per prospect. Kim wanted to go deeper, but I pushed back because I knew from talking to Chan that they only needed five or six key fields to run outreach. It wasn't easy to say no to more research, but keeping it focused meant we delivered on time."</p>
+        </div>
+        <div class="option">
+          <div class="option-label">Option C: You volunteered to present to the supervisor</div>
+          <p>"When it came time to give our first progress update to the supervisor, I volunteered to present on behalf of the research function. It was outside my comfort zone, but I felt it was important that someone from our side could explain the AI approach in plain terms, not just technical jargon."</p>
+        </div>
+        <div class="option">
+          <div class="option-label">Option D: You identified a gap nobody else saw</div>
+          <p>"Early on, I noticed that our prospect list was missing a key variable &mdash; <em>[fill in: e.g. contract renewal dates / seasonal buying patterns / company size thresholds]</em>. I raised this in our team meeting and proposed we add it. That ended up being one of the most useful fields for the predictive model."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 2 -->
+  <div class="section" id="part2">
+    <div class="section-header">
+      <span class="section-number p2">2</span>
+      <span class="section-title">Decision Making & Conflict Resolution</span>
+      <span class="section-time">~4 min</span>
+    </div>
+    <div class="script-text">
+
+      <!-- Decision A -->
+      <div class="subsection" style="margin-top: 0; padding-top: 0; border-top: none;">
+        <div class="subsection-title"><span class="dot decision"></span> Decision 1: Existing Customers vs. New Acquisition</div>
+        <p>The first major decision our team navigated was around <strong>resource allocation</strong> &mdash; specifically, whether to prioritise upselling to Proskill's existing customers or focus on acquiring entirely new ones.</p>
+        <p>Chan and An, from the data analytics and marketing side, initially leaned toward existing customer retention because the data was more accessible and conversion rates are typically higher. Kim and I, on the research side, saw a bigger opportunity in new customer acquisition because we believed our AI tools could identify high-potential prospects that Proskill hadn't reached yet.</p>
+
+        <div class="fill-in">
+          <p><strong>Credit a specific teammate idea here.</strong> For example:</p>
+          <p>"It was actually <em>[Chan/An]</em> who pointed out that <em>[specific insight, e.g. existing customers had a 60% reorder rate / the mining sector had the highest repeat purchase volume]</em>, and that insight shaped how we split our approach."</p>
+        </div>
+
+        <div class="highlight-box example">
+          <strong>What we did:</strong> Rather than forcing one direction, we brought it to a team discussion and agreed on a <strong>dual approach</strong>. The marketing function would focus on existing customer strategies while research and AI would prioritise building the new prospect pipeline.
+        </div>
+
+        <p>The benefit of this decision was that it <strong>played to each sub-team's strengths</strong> instead of forcing everyone into the same lane. We could pursue both goals with dedicated focus rather than compromising on either.</p>
+      </div>
+
+      <!-- Decision B -->
+      <div class="subsection">
+        <div class="subsection-title"><span class="dot decision"></span> Decision 2: AI Model Complexity vs. Feasibility</div>
+        <p>The second decision was about <strong>which AI approach to use</strong> for predicting when a customer might need new workwear. Kim and I debated between a more complex machine learning model that could deliver higher accuracy versus a simpler rule-based approach we could actually build and validate within our timeline.</p>
+        <p>The complex model would have required more data than we had access to and more time to train and test.</p>
+
+        <div class="highlight-box example">
+          <strong>What we chose:</strong> The simpler approach &mdash; giving us a <strong>working prototype</strong> we could actually demonstrate, rather than an ambitious model that might not have been ready in time.
+        </div>
+
+        <p>The key lesson here was about being <strong>pragmatic</strong>. The best solution isn't always the most technically sophisticated one; it's the one that delivers value within the constraints you're working with.</p>
+      </div>
+
+      <!-- Conflict F -->
+      <div class="subsection">
+        <div class="subsection-title"><span class="dot conflict"></span> Conflict: The Communication Gap</div>
+        <p>I also want to be transparent about a friction point we experienced, because I think it's important for the retrospective to be honest about challenges, not just successes.</p>
+        <p>Midway through the project, there was a <strong>communication gap between the two sub-teams</strong>. Kim and I had been building out the predictive dataset and some early AI workflow prototypes, but when we shared our outputs with Chan and An on the marketing side, they found it difficult to translate our work into actionable marketing campaigns. The data format wasn't quite right, some customer segments didn't align with their outreach categories, and there wasn't enough context around why certain prospects were flagged as high-potential.</p>
+        <p>At first, this was frustrating on both sides. We felt we'd done solid research work, and they felt they couldn't use it.</p>
+
+        <div class="highlight-box insight">
+          <strong>How we resolved it:</strong> We set up a <strong>dedicated feedback loop</strong>. The marketing team walked us through exactly what they needed &mdash; the format, the fields, the level of detail. Kim and I then restructured our outputs to match those requirements. The second version of our prospect dataset &mdash; the one with over 100 records including industry, employee count ranges, and direct decision-maker contacts &mdash; was built directly in response to that feedback.
+        </div>
+
+        <p>The bigger takeaway for me was that <strong>building something technically sound is not the same as building something useful</strong>. The value of our work only materialised when it was usable by the people downstream. This taught me to involve stakeholders earlier and check alignment before building, not after.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PART 3 -->
+  <div class="section" id="part3">
+    <div class="section-header">
+      <span class="section-number p3">3</span>
+      <span class="section-title">Key Team Behaviours</span>
+      <span class="section-time">~3.5 min</span>
+    </div>
+    <div class="script-text">
+
+      <div class="subsection" style="margin-top: 0; padding-top: 0; border-top: none;">
+        <div class="subsection-title"><span class="dot behaviour"></span> 1. Structured Coordination Across Functions</div>
+        <p>One behaviour that served us well was maintaining <strong>regular team meetings</strong> to review progress, validate key decisions, and adjust direction. This was especially important because our team was split into two distinct functions &mdash; without deliberate coordination, these two streams could easily have drifted apart.</p>
+
+        <div class="highlight-box insight">
+          <strong>Example:</strong> After the communication gap I described, we committed to <strong>weekly syncs</strong> where each function would share not just what they'd done, but what they needed from the other side. This made our collaboration intentional rather than reactive.
+        </div>
+
+        <p>The benefit was that it kept research, data, and AI development aligned and feeding into each other, which is exactly what our team charter called for.</p>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title"><span class="dot behaviour"></span> 2. Playing to Individual Strengths</div>
+        <p>Another key behaviour was dividing work based on <strong>individual expertise</strong> rather than splitting tasks evenly for the sake of fairness. Chan and An led the customer segmentation, RFI identification, and campaign design. Kim and I focused on research, data collection, and AI tool development.</p>
+
+        <div class="fill-in">
+          <p><strong>Give 1-2 teammates specific credit.</strong> For example:</p>
+          <p>"Chan <em>[did something specific, e.g. designed the outreach email templates / identified which industries to target first]</em>, and that directly shaped our campaign strategy."</p>
+          <p>"Kim <em>[did something specific, e.g. found an open-source tool we used for data scraping / built the initial scoring model]</em>, which saved us significant time."</p>
+          <p>"An <em>[did something specific, e.g. created the customer segmentation framework / mapped out the RFI submission process]</em>."</p>
+        </div>
+
+        <div class="highlight-box insight">
+          <strong>Why this worked:</strong> When everyone works on what they're best at, the overall output is stronger. And because we had the coordination mechanisms in place, we avoided the silo risk. Each function could go deep on their area while staying connected to the bigger picture.
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title"><span class="dot behaviour"></span> 3. Integrating Feedback Into Action</div>
+        <p>The third behaviour &mdash; and the one I'm most proud of as a team &mdash; is that we didn't just collect feedback; <strong>we acted on it</strong>. When the marketing team said our dataset wasn't usable, we restructured it. When we realised our AI approach was too ambitious, we scoped it down. When workload started to feel unbalanced, we talked about it openly.</p>
+
+        <p>This connects back to my role as a Giver. I naturally want to support others and make sure everyone's voice is heard. But what I learned through this project is that being a Giver isn't just about being supportive &mdash; it's about being <strong>responsive</strong>. It's about taking what the team gives you in terms of feedback and turning it into concrete changes.</p>
+
+        <div class="draft-pick">
+          <div style="font-size:0.9rem; color:#666; margin-bottom:12px;">Add a <strong>personal vulnerability moment</strong> &mdash; something you got wrong or struggled with. Pick one:</div>
+          <div class="option">
+            <div class="option-label">Option A: Overcommitting and needing to ask for help</div>
+            <p>"I'll be honest &mdash; there was a point where I'd taken on too much. I was trying to finish the dataset, help Kim with the model, and also prepare our update for the supervisor. I ended up staying up late and the quality of my work dropped. I had to ask Kim to take over part of the dataset, which was hard for me because I don't like feeling like I'm letting someone down. But it was the right call."</p>
+          </div>
+          <div class="option">
+            <div class="option-label">Option B: Making an assumption that turned out wrong</div>
+            <p>"One thing I got wrong early on was assuming that more data fields would automatically make our dataset more useful. I spent time researching company revenue estimates and ABN details, but when Chan looked at it, she said none of that was relevant for outreach. I'd wasted about two days on fields nobody needed. That was a lesson in checking with your end user before building."</p>
+          </div>
+          <div class="option">
+            <div class="option-label">Option C: Taking feedback too personally at first</div>
+            <p>"When Chan and An first told us the dataset wasn't usable, I'll admit I took it personally. I'd put a lot of effort into it and my first reaction was defensive. It took me a day to step back and realise they weren't criticising my work &mdash; they were telling me what they needed. That shift in perspective was probably my biggest personal growth moment in this project."</p>
+          </div>
+        </div>
+
+        <p>What I take away from this project is that a team works best when everyone is willing to hear each other, adjust, and turn that into something better than any of us would have built alone.</p>
+      </div>
+
+      <!-- Closing -->
+      <div class="subsection">
+        <div class="subsection-title"><span class="dot behaviour"></span> Closing</div>
+        <p>To wrap up, this project with Proskill Workwear taught me a lot &mdash; about the value of pragmatic decision-making, about the importance of building for your stakeholders and not just for technical correctness, and about how honest communication can turn friction into improvement.</p>
+        <p>I'm grateful to Chan, An, and Kim for being a team that made it safe to be honest, and I look forward to carrying these lessons forward. Thank you.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Draft Instructions (remove before final version) -->
+  <div class="rubric-card">
+    <h3>Draft Instructions</h3>
+    <div style="opacity:0.9; font-size:0.9rem; line-height:1.6;">
+      <p style="margin-bottom:10px;">1. Pick <strong>one leadership scenario</strong> from the yellow box in Part 1 (or write your own)</p>
+      <p style="margin-bottom:10px;">2. Fill in the <strong>blue teammate credit boxes</strong> with real examples from your project</p>
+      <p style="margin-bottom:10px;">3. Pick <strong>one vulnerability moment</strong> from the yellow box in Part 3 (or write your own)</p>
+      <p style="margin-bottom:10px;">4. Delete all yellow and blue boxes, keeping only your chosen text</p>
+      <p>5. Delete this card before presenting</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    Proskill Workwear Australia &mdash; Team Retrospective &mdash; 2026
+  </div>
+
+</div>
+
+</body>
+</html>
