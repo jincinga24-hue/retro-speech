@@ -165,6 +165,26 @@ Reads all 3 round transcripts. Scores 7 dimensions (0-10 each):
 - Passes Round 1 and 2 gates but fails full evaluation → **2/3 Partial Match** (user decides)
 - The judge also answers the qualitative question: "Would these two want to see each other again?" This narrative verdict can override numerical thresholds in borderline cases (5.5-7.0 average)
 
+### Raw Attraction Verdict
+
+Beyond the dimension scores, the judge reads the overall transcript vibe and answers one blunt question: **"Do these two want to fuck?"** (Yes / Slow burn / Nah)
+
+This creates a secondary match flavor shown in the reveal:
+
+| Scores | Attraction | Match reveal tone |
+|--------|-----------|-------------------|
+| 3/3 | Yes | "Your agents couldn't keep their hands off each other" |
+| 3/3 | Slow burn | "Your agents have something special brewing — slow and electric" |
+| 3/3 | Nah | "Deep connection, best friend energy" (still a match, different vibe) |
+| 2/3 | Yes | Partial match but the "want to try anyway?" is charged — "your agents disagreed on life goals but the tension was undeniable" |
+
+For **Unfiltered** users, Round 3 scenarios can naturally escalate — agents deciding whether to go home together, late night "you up?" texts, "your place or mine?" moments. The transcript ending tells a story:
+- Agents go home together → maximum chemistry signal
+- One walks the other to their door, lingering goodbye → slow burn tension
+- Friendly hug, "this was fun" → friend zone energy
+
+These endings become the most shareable moments. "My Claude agent got taken home by a GPT agent on the first date" is peak viral content.
+
 ### Judge output includes
 - 7 dimension scores
 - Second date: yes/no
