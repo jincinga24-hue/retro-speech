@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ENGR30002 Practical 2 — Centrifugal Pump Report</title>
+<script>
+MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; max-width: 880px; margin: 40px auto; padding: 0 30px; line-height: 1.55; color: #1a1a1a; }
+  h1 { font-size: 26px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+  h2 { font-size: 20px; margin-top: 36px; border-bottom: 1px solid #aaa; padding-bottom: 4px; }
+  h3 { font-size: 16px; margin-top: 28px; color: #1a3a6a; }
+  table { border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th, td { border: 1px solid #888; padding: 6px 10px; text-align: left; }
+  th { background: #eee; }
+  td.num { text-align: right; }
+  code, pre { font-family: 'SF Mono', Menlo, Consolas, monospace; background: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-size: 13px; }
+  pre { padding: 12px; overflow-x: auto; }
+  figure { text-align: center; margin: 18px 0; }
+  figure img { max-width: 100%; border: 1px solid #ccc; }
+  figcaption { font-style: italic; font-size: 13px; color: #555; margin-top: 6px; }
+  .cover { text-align: center; margin: 80px 0 60px; }
+  .cover .title { font-size: 28px; font-weight: bold; }
+  .cover .subtitle { font-size: 18px; margin-top: 10px; color: #444; }
+  .cover .meta { margin-top: 50px; font-size: 16px; }
+  .highlight { background: #fff4d6; padding: 2px 6px; }
+  blockquote { border-left: 3px solid #aaa; margin-left: 0; padding-left: 16px; color: #444; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="title">ENGR30002 Fluid Mechanics</div>
+  <div class="subtitle">Practical 2: Elements & Evaluation of a Centrifugal Pump</div>
+  <div class="meta">
+    <p><strong>Student Name:</strong> [Your official name]</p>
+    <p><strong>Student ID:</strong> [Your ID]</p>
+    <p><strong>Date:</strong> 2026-05-11</p>
+  </div>
+</div>
+
+<h2>Abstract</h2>
+<p>This practical investigated the operation and performance of a 100 W centrifugal pump. The pump was first dismantled to identify its principal components (impeller, volute, motor, seals). Performance was then characterised across three speed settings by measuring the pump head $h_P$ as a function of volumetric flow rate $Q$. Experimental data were fitted to the form $h_P = a + bQ^c$ ($R^2 > 0.996$ for all settings), giving shutoff heads of 3.31, 4.79 and 5.61 m for the Slow, Mid and High settings respectively. A theoretical system head curve was constructed for the valve-fully-open configuration using the Fanning friction factor (Haaland equation) and tabulated minor-loss coefficients. The theoretical system head underpredicted the measured head loss by a factor of approximately 3 at all three operating points, with the orifice flow meter contributing the largest single source of theoretical loss (~50% of $h_{sys}$). The discrepancy is attributed primarily to an underestimated flow-meter resistance coefficient and unaccounted-for losses in pipe fittings and unions.</p>
+
+<h2>Aim</h2>
+<ol>
+  <li>To dismantle a centrifugal pump and identify its constituent components.</li>
+  <li>To determine the performance curve of a 100 W centrifugal pump at three speed settings.</li>
+  <li>To construct a theoretical system head curve and determine operating conditions for the pump.</li>
+</ol>
+
+<h2>Questions</h2>
+
+<h3>(a) System sketch</h3>
+<p>The piping system, viewed from inlet to outlet, contains the following elements (locations of minor losses marked with ★):</p>
+<table>
+  <tr><th>Element</th><th>Length / size</th><th>Minor-loss source?</th></tr>
+  <tr><td>Reservoir entrance (sharp-edged)</td><td>DN25, ID 25 mm</td><td>★ $K = 0.5$</td></tr>
+  <tr><td>DN25 PVC pipe (section 1)</td><td>$L = 108$ cm, $D = 25$ mm</td><td>—</td></tr>
+  <tr><td>Centrifugal pump</td><td>—</td><td>(provides $h_P$)</td></tr>
+  <tr><td>Gate valve (fully open)</td><td>—</td><td>★ $K = 0.2$</td></tr>
+  <tr><td>2 × 90° elbow</td><td>—</td><td>★ $K = 0.9$ each</td></tr>
+  <tr><td>Contraction DN25 → DN20</td><td>sudden</td><td>★ $K = 0.20$</td></tr>
+  <tr><td>DN20 PVC pipe</td><td>$L = 39$ cm, $D = 20$ mm</td><td>—</td></tr>
+  <tr><td>Orifice flow meter</td><td>ID 14 mm</td><td>★ $K = 2.7$ (given)</td></tr>
+  <tr><td>Expansion DN20 → DN25</td><td>sudden</td><td>★ $K = 0.130$</td></tr>
+  <tr><td>DN25 PVC pipe (section 2)</td><td>$L = 22$ cm, $D = 25$ mm</td><td>—</td></tr>
+  <tr><td>Pipe exit → reservoir</td><td>—</td><td>★ $K = 1.0$</td></tr>
+</table>
+<p><em>Note:</em> A hand-drawn or PowerPoint schematic should be inserted here showing the flow path with these elements labelled. Major losses (pipe friction) occur in the three pipe sections (1.30 m total of DN25 and 0.39 m of DN20).</p>
+
+<h3>(b) Priming a pump</h3>
+<p><strong>Priming</strong> is the process of filling the pump casing and suction line with the working liquid prior to startup, displacing any trapped air. It is essential for centrifugal pumps because they are <em>not self-priming</em>: the impeller develops head by transferring kinetic energy to the liquid via centrifugal action, and air is too low in density for the impeller to generate sufficient suction pressure to draw water up from the reservoir.</p>
+<p>Consequences of running an unprimed pump include:</p>
+<ul>
+  <li><strong>No flow develops</strong> — the pump cannot lift water against the suction-side static head.</li>
+  <li><strong>Mechanical seal damage</strong> — many pump seals are cooled and lubricated by the working fluid; dry running rapidly destroys them.</li>
+  <li><strong>Cavitation-like vibration</strong> as air pockets collapse, accelerating bearing wear.</li>
+</ul>
+<p>In this practical, the water-sealing bolt is loosened to vent trapped air while the system fills, and re-tightened once a continuous stream of water flows through.</p>
+
+<h3>(c) Experimental pump curves ($h_P$ vs $Q$)</h3>
+<p>The pump head was computed from the gauge readings using $h_P = (P_4 - P_3)/(\rho g)$ with $\rho = 1000$ kg/m³ and $g = 9.81$ m/s². Since $P_3 \approx 0$ gauge on the suction side, $h_P\,[\text{m}] = P_\text{gauge}\,[\text{kPa}] / 9.81$.</p>
+<figure>
+  <img src="fig1_pump_curves_data.png" alt="Experimental pump curves">
+  <figcaption><strong>Figure 1.</strong> Experimental pump head $h_P$ vs flow rate $Q$ for the three speed settings.</figcaption>
+</figure>
+<table>
+  <tr><th>Setting</th><th>$P$ range (kPa)</th><th>$Q$ range (L/min)</th><th>Shutoff head (m)</th></tr>
+  <tr><td>Slow (I)</td><td>32.5 → 10</td><td>0 → 20.65</td><td class="num">3.31</td></tr>
+  <tr><td>Mid (II)</td><td>47 → 20</td><td>0 → 28.40</td><td class="num">4.79</td></tr>
+  <tr><td>High (III)</td><td>55 → 30</td><td>0 → 36.36</td><td class="num">5.61</td></tr>
+</table>
+
+<h3>(d) Pump curve fits: $h_P = a + bQ^c$</h3>
+<p>Nonlinear least-squares fitting (MATLAB <code>lsqcurvefit</code>) gives:</p>
+<table>
+  <tr><th>Setting</th><th>$a$ (m)</th><th>$b$</th><th>$c$</th><th>$R^2$</th></tr>
+  <tr><td><strong>Slow</strong></td><td class="num">3.3395</td><td class="num">−0.16888</td><td class="num">0.8747</td><td class="num">0.9967</td></tr>
+  <tr><td><strong>Mid</strong></td><td class="num">4.7939</td><td class="num">−0.06548</td><td class="num">1.1210</td><td class="num">0.9986</td></tr>
+  <tr><td><strong>High</strong></td><td class="num">5.5369</td><td class="num">−0.02546</td><td class="num">1.2733</td><td class="num">0.9966</td></tr>
+</table>
+<figure>
+  <img src="fig2_pump_curves_fits.png" alt="Pump curves with fitted lines">
+  <figcaption><strong>Figure 2.</strong> Experimental data with fitted curves $h_P = a + bQ^c$ overlaid. All fits achieve $R^2 > 0.996$.</figcaption>
+</figure>
+<p><strong>Physical interpretation:</strong> The parameter $a$ equals the shutoff head (maximum pressure rise at $Q = 0$); $bQ^c$ is the head-degradation term as flow increases. The exponent $c$ controls the curve shape — $c < 1$ gives a curve that drops steeply at low $Q$ then flattens (Slow), $c > 1$ gives a curve that descends more gradually at first then steepens (Mid, High).</p>
+
+<h3>(e) Throttling valve and NPSH</h3>
+<p><strong>Purpose:</strong> A throttling valve controls the volumetric flow rate $Q$ through a piping system. The valve introduces a variable resistance coefficient $K$, raising the friction head and shifting the system head curve $h_\text{sys}(Q)$ upward. Its intersection with the (fixed) pump curve therefore moves to a lower $Q$, allowing $Q$ to be set to any desired value below the wide-open value.</p>
+<p><strong>NPSH implication of placing a throttling valve before the pump inlet:</strong></p>
+<p>The Net Positive Suction Head available is</p>
+<p>$$ NPSH_A = \frac{P_1 - P_\text{vap}}{\rho g} + z_1 - h_{fs} $$</p>
+<p>where $h_{fs}$ is the friction head loss on the suction side. A throttling valve upstream of the pump adds a large $K$ to the suction-side losses, directly increasing $h_{fs}$ and therefore <em>decreasing</em> $NPSH_A$. If $NPSH_A &lt; NPSH_R$, the local pressure on the suction side falls below the liquid vapour pressure, vapour bubbles form, and <strong>cavitation</strong> occurs.</p>
+<p>Consequences of cavitation:</p>
+<ul>
+  <li>Sudden noise and vibration as bubbles collapse on the impeller.</li>
+  <li>Pitting damage to impeller blades and pump casing.</li>
+  <li>Loss of pump head and efficiency.</li>
+</ul>
+<p>For these reasons, <strong>throttling valves should always be placed on the discharge (high-pressure) side</strong> of the pump. The suction side is kept as low-resistance as practicable.</p>
+
+<h3>(f) Theoretical system head curve</h3>
+<p>Applying the mechanical energy balance between the reservoir surface (point 1) and the tank discharge (point 2), and noting that both surfaces are at atmospheric pressure with negligible velocity and identical elevation:</p>
+<p>$$ h_P = h_L = \sum_i 2 f_F \!\left(\frac{L}{D}\right)_i \frac{V_i^2}{g} + \sum_j K_j \frac{V_j^2}{2g} $$</p>
+<p><strong>Assumptions:</strong> Water at 20 °C ($\rho = 1000$ kg/m³, $\mu = 1.0\times10^{-3}$ Pa·s); PVC pipe taken as hydraulically smooth ($\varepsilon \approx 1.5\times10^{-6}$ m); $\alpha = 1$ (turbulent flow, verified below); sharp-edged pipe entrance/exit.</p>
+<p>Fanning friction factor calculated from the Haaland correlation:</p>
+<p>$$ \frac{1}{\sqrt{f_D}} = -1.8 \log_{10}\!\left[\frac{6.9}{Re} + \left(\frac{\varepsilon/D}{3.7}\right)^{1.11}\right], \quad f_F = f_D/4 $$</p>
+<p><strong>Resistance coefficients used</strong> (from Çengel &amp; Cimbala Table 8-4 and Topic 4 lecture notes):</p>
+<table>
+  <tr><th>Element</th><th>$K$</th><th>Reference velocity</th></tr>
+  <tr><td>Pipe entrance (sharp-edged)</td><td class="num">0.5</td><td>$V_{25}$</td></tr>
+  <tr><td>Gate valve (fully open)</td><td class="num">0.2</td><td>$V_{25}$</td></tr>
+  <tr><td>90° threaded elbow (×2)</td><td class="num">0.9 each</td><td>$V_{25}$</td></tr>
+  <tr><td>Sudden contraction 25→20 ($d^2/D^2 = 0.64$)</td><td class="num">0.20</td><td>$V_{20}$</td></tr>
+  <tr><td>Orifice flow meter (given)</td><td class="num">2.7</td><td>$V_{20}$</td></tr>
+  <tr><td>Sudden expansion 20→25 ($K = (1-A_{20}/A_{25})^2$)</td><td class="num">0.130</td><td>$V_{20}$</td></tr>
+  <tr><td>Pipe exit (pipe → tank)</td><td class="num">1.0</td><td>$V_{25}$</td></tr>
+</table>
+<p><strong>Flow regime check</strong> at maximum experimental flow ($Q = 36.36$ L/min):</p>
+<table>
+  <tr><th>Section</th><th>$V$ (m/s)</th><th>$Re$</th><th>Regime</th></tr>
+  <tr><td>DN25</td><td class="num">1.235</td><td class="num">30,863</td><td>turbulent</td></tr>
+  <tr><td>DN20</td><td class="num">1.929</td><td class="num">38,579</td><td>turbulent</td></tr>
+</table>
+<p>Both $Re \gg 4000$, so the turbulent flow assumption ($\alpha = 1$) is valid.</p>
+<figure>
+  <img src="fig3_system_curve.png" alt="Theoretical system head curve">
+  <figcaption><strong>Figure 3.</strong> Theoretical system head curve $h_\text{sys}(Q)$ for the valve-fully-open configuration. The curve is approximately quadratic in $Q$ since all loss terms scale with $V^2 \propto Q^2$.</figcaption>
+</figure>
+
+<h3>(g) Comparison of experimental and theoretical system head</h3>
+<p>At the valve-fully-open condition, the pump head equals the total system head loss (since $\Delta z = 0$, $\Delta P = 0$, $\Delta V^2 \approx 0$ at the tank surfaces). The experimental and theoretical comparisons are:</p>
+<table>
+  <tr><th>Setting</th><th>$Q_\text{exp}$ (L/min)</th><th>$h_{P,\text{exp}} = h_{\text{sys,exp}}$ (m)</th><th>$h_{\text{sys,theory}}$ (m)</th><th>Ratio exp/theory</th></tr>
+  <tr><td>Slow</td><td class="num">20.65</td><td class="num">1.019</td><td class="num">0.338</td><td class="num">3.02 ×</td></tr>
+  <tr><td>Mid</td><td class="num">28.40</td><td class="num">2.039</td><td class="num">0.630</td><td class="num">3.24 ×</td></tr>
+  <tr><td>High</td><td class="num">36.36</td><td class="num">3.058</td><td class="num">1.022</td><td class="num">2.99 ×</td></tr>
+</table>
+<p><strong>Theoretical operating points</strong> from the intersection of the pump and system curves (Figure 4):</p>
+<table>
+  <tr><th>Setting</th><th>$Q_\text{theory}$ (L/min)</th><th>$h_\text{theory}$ (m)</th><th>$Q_\text{exp}$ (L/min)</th><th>$Q$ error</th></tr>
+  <tr><td>Slow</td><td class="num">25.14</td><td class="num">0.505</td><td class="num">20.65</td><td class="num">+21.7%</td></tr>
+  <tr><td>Mid</td><td class="num">36.85</td><td class="num">1.060</td><td class="num">28.40</td><td class="num">+29.8%</td></tr>
+  <tr><td>High</td><td class="num">49.47</td><td class="num">1.879</td><td class="num">36.36</td><td class="num">+36.0%</td></tr>
+</table>
+<figure>
+  <img src="fig4_operating_points.png" alt="Pump curves vs system curve">
+  <figcaption><strong>Figure 4.</strong> Pump curves (fitted) and theoretical system curve. Cyan stars: theoretical operating points; green stars: experimental operating points (valve fully open).</figcaption>
+</figure>
+
+<h4>Head-loss breakdown at experimental operating points (theoretical, m):</h4>
+<table>
+  <tr><th>Loss term</th><th>Slow (20.65 L/min)</th><th>Mid (28.40 L/min)</th><th>High (36.36 L/min)</th></tr>
+  <tr><td>Friction DN25 (1.30 m)</td><td class="num">0.0348</td><td class="num">0.0608</td><td class="num">0.0940</td></tr>
+  <tr><td>Friction DN20 (0.39 m)</td><td class="num">0.0302</td><td class="num">0.0529</td><td class="num">0.0819</td></tr>
+  <tr><td>Entrance ($K=0.5$)</td><td class="num">0.0125</td><td class="num">0.0237</td><td class="num">0.0388</td></tr>
+  <tr><td>Gate valve ($K=0.2$)</td><td class="num">0.0050</td><td class="num">0.0095</td><td class="num">0.0155</td></tr>
+  <tr><td>2 × 90° elbow</td><td class="num">0.0451</td><td class="num">0.0853</td><td class="num">0.1398</td></tr>
+  <tr><td>Contraction ($K=0.20$)</td><td class="num">0.0122</td><td class="num">0.0231</td><td class="num">0.0379</td></tr>
+  <tr><td><strong>Flow meter ($K=2.7$)</strong></td><td class="num"><strong>0.1652</strong></td><td class="num"><strong>0.3124</strong></td><td class="num"><strong>0.5120</strong></td></tr>
+  <tr><td>Expansion ($K=0.130$)</td><td class="num">0.0079</td><td class="num">0.0150</td><td class="num">0.0246</td></tr>
+  <tr><td>Exit ($K=1.0$)</td><td class="num">0.0251</td><td class="num">0.0474</td><td class="num">0.0777</td></tr>
+  <tr><td><strong>Total $h_\text{sys}$ (m)</strong></td><td class="num"><strong>0.338</strong></td><td class="num"><strong>0.630</strong></td><td class="num"><strong>1.022</strong></td></tr>
+</table>
+
+<h4>Discussion of discrepancies</h4>
+<p>The experimental system head loss is approximately <span class="highlight">3.0–3.2× larger</span> than the theoretical prediction across all three settings. Importantly, this ratio is essentially constant, suggesting a <strong>systematic underestimation</strong> rather than random error. Several factors likely contribute:</p>
+<ol>
+  <li><strong>Orifice flow meter $K$ underestimated.</strong> The given $K = 2.7$ already accounts for 49–50% of the theoretical $h_\text{sys}$. Real orifice meters with $\beta = d/D = 14/20 = 0.7$ typically have full-loss coefficients in the range $K = 5$–$15$ (depending on $Re$ and edge geometry). If actual $K_\text{flowmeter} \approx 10$, theoretical $h_\text{sys}$ would roughly double.</li>
+  <li><strong>Gate valve not perfectly open.</strong> A gate valve at 75% open has $K \approx 0.3$ (vs 0.2 fully open); even slight partial closure significantly raises losses.</li>
+  <li><strong>Additional minor losses not accounted for.</strong> The system contains barrel unions, threaded couplings and pipe-end fittings, each contributing $K \approx 0.05$–$0.1$. Summed across the rig, these could add 0.3–0.5 to $\sum K$.</li>
+  <li><strong>Pipe roughness.</strong> PVC was assumed hydraulically smooth ($\varepsilon = 1.5\ \mu$m), but assembly joints, glue residue and connector edges raise the effective roughness. The friction factor would be modestly higher (~15–20%) on a Moody chart with a more realistic $\varepsilon \approx 50\ \mu$m.</li>
+  <li><strong>Pump-internal losses included in $h_P$.</strong> Strictly, $h_P$ is the head delivered by the pump impeller to the fluid; some of the measured $(P_4 - P_3)$ might include irreversibilities across the gauge tappings themselves.</li>
+  <li><strong>Measurement uncertainty</strong> in pressure gauges (±0.5 kPa typical) and the flow meter (±5% typical) compounds toward the experimental side.</li>
+</ol>
+<p><strong>Conclusion of comparison:</strong> While the <em>shape</em> of the theoretical system curve correctly captures the quadratic $Q^2$ dependence, the <em>magnitude</em> is significantly underestimated, primarily because the standard $K = 2.7$ for the orifice flow meter is conservative for this specific geometry. A more accurate prediction would require either direct measurement of the flow-meter pressure drop or use of a calibrated orifice-meter discharge coefficient.</p>
+
+<h2>Conclusion</h2>
+<p>The three primary aims of the practical were achieved:</p>
+<ol>
+  <li><strong>Pump dismantling</strong> revealed the standard centrifugal pump architecture: motor → drive shaft → impeller in volute casing with seals at the shaft penetration. The volute's expanding cross-section converts the impeller's kinetic energy gain into a pressure rise.</li>
+  <li><strong>Performance characterisation</strong> yielded three smooth, monotonically-decreasing pump curves well fitted by $h_P = a + bQ^c$ with $R^2 > 0.996$ for all settings. Shutoff heads (3.31, 4.79, 5.61 m) and maximum flows (20.65, 28.40, 36.36 L/min) scale approximately linearly with the dial setting, consistent with proportional speed control of the impeller.</li>
+  <li><strong>System curve</strong> construction using standard friction-factor and minor-loss correlations correctly predicts the quadratic $h_\text{sys} \propto Q^2$ form but underestimates the magnitude by a factor of approximately 3. The dominant theoretical loss term is the orifice flow meter (~50% of $h_\text{sys}$), and its given $K = 2.7$ is the most likely source of error. Theoretical operating points are 22–36% higher in $Q$ than measured.</li>
+</ol>
+<p>For improved theoretical accuracy, the flow meter $K$-value should be calibrated experimentally, and additional fitting losses (unions, couplings) should be included in the model.</p>
+
+<h2>Appendix</h2>
+
+<h3>A1. Sample calculation: system head at $Q = 36.36$ L/min</h3>
+<pre>Q = 36.36 L/min = 6.06 × 10⁻⁴ m³/s
+V_25 = Q / (π × 0.025² / 4) = 1.235 m/s
+V_20 = Q / (π × 0.020² / 4) = 1.929 m/s
+Re_25 = 1000 × 1.235 × 0.025 / 1e-3 = 30,863  (turbulent)
+Re_20 = 1000 × 1.929 × 0.020 / 1e-3 = 38,579  (turbulent)
+
+Haaland (smooth pipe, ε/D ≈ 0):
+f_D,25 = 0.0233 → f_F,25 = 0.00582
+f_D,20 = 0.0221 → f_F,20 = 0.00554
+
+Major losses:
+  h_f,25 = 2 × 0.00582 × (1.30 / 0.025) × 1.235² / 9.81 = 0.094 m
+  h_f,20 = 2 × 0.00554 × (0.39 / 0.020) × 1.929² / 9.81 = 0.082 m
+
+Minor losses (V²/2g terms):
+  V_25²/2g = 0.0777 m;  V_20²/2g = 0.1896 m
+  Entry      = 0.5  × 0.0777 = 0.0388 m
+  Valve      = 0.2  × 0.0777 = 0.0155 m
+  2 elbows   = 1.8  × 0.0777 = 0.1398 m
+  Contract   = 0.20 × 0.1896 = 0.0379 m
+  Flow meter = 2.7  × 0.1896 = 0.5120 m
+  Expand     = 0.130 × 0.1896 = 0.0246 m
+  Exit       = 1.0  × 0.0777 = 0.0777 m
+
+Total h_sys (theory) = 1.022 m
+Experimental h_sys at Q = 36.36 = 30/9.81 = 3.058 m
+Ratio exp/theory = 2.99×</pre>
+
+<h3>A2. Raw data</h3>
+<table>
+  <tr><th>Slow $P$ (kPa)</th><th>Slow $Q$ (L/min)</th><th>Mid $P$ (kPa)</th><th>Mid $Q$ (L/min)</th><th>High $P$ (kPa)</th><th>High $Q$ (L/min)</th></tr>
+  <tr><td class="num">32.5</td><td class="num">0</td><td class="num">47</td><td class="num">0</td><td class="num">55</td><td class="num">0</td></tr>
+  <tr><td class="num">30</td><td class="num">2.17</td><td class="num">45</td><td class="num">2.56</td><td class="num">52.5</td><td class="num">3.36</td></tr>
+  <tr><td class="num">27.5</td><td class="num">3.75</td><td class="num">42.5</td><td class="num">5.61</td><td class="num">50</td><td class="num">8.18</td></tr>
+  <tr><td class="num">26</td><td class="num">4.85</td><td class="num">40</td><td class="num">9.18</td><td class="num">47.5</td><td class="num">14.31</td></tr>
+  <tr><td class="num">25</td><td class="num">6.06</td><td class="num">35</td><td class="num">13.64</td><td class="num">45</td><td class="num">17.04</td></tr>
+  <tr><td class="num">22.5</td><td class="num">7.75</td><td class="num">32.5</td><td class="num">16.42</td><td class="num">42.5</td><td class="num">21.54</td></tr>
+  <tr><td class="num">20</td><td class="num">10.60</td><td class="num">30</td><td class="num">18.18</td><td class="num">40</td><td class="num">23.50</td></tr>
+  <tr><td class="num">17.5</td><td class="num">12.71</td><td class="num">27.5</td><td class="num">20.73</td><td class="num">37.5</td><td class="num">27.54</td></tr>
+  <tr><td class="num">15</td><td class="num">14.90</td><td class="num">25</td><td class="num">23.00</td><td class="num">35</td><td class="num">30.30</td></tr>
+  <tr><td class="num">12.5</td><td class="num">16.67</td><td class="num">22.5</td><td class="num">25.97</td><td class="num">32.5</td><td class="num">33.32</td></tr>
+  <tr><td class="num">10</td><td class="num">20.65</td><td class="num">20</td><td class="num">28.40</td><td class="num">30</td><td class="num">36.36</td></tr>
+</table>
+
+<h3>A3. MATLAB analysis script</h3>
+<p>Full analysis script: <code>prac2_full_analysis.m</code> in the project folder. Generates all fits, the theoretical system curve, and all four figures.</p>
+
+</body>
+</html>
